@@ -1,1 +1,243 @@
-# meena-valentinee
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Meena ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(120deg,#ffd6e8,#fff0f5);
+    text-align:center;
+}
+
+/* COMMON */
+button{
+    padding:15px 35px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    background:#ff4d6d;
+    color:white;
+    margin:10px;
+}
+
+/* START */
+#startPage{padding:50px 20px;}
+#buttonsBox{position:relative;height:200px;}
+#noBtn{background:#ccc;color:black;position:absolute;left:120px;top:80px;}
+#taunt{margin-top:20px;font-style:italic;}
+
+/* LOVE PAGE */
+#lovePage{display:none;padding:30px 15px;}
+.paper{
+    background:white;
+    max-width:700px;
+    margin:25px auto;
+    padding:30px;
+    text-align:left;
+    border-radius:8px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.paper h2{text-align:center;}
+
+/* QUESTIONS */
+#questionPage{display:none;padding:40px 20px;}
+.optionBtn{
+    display:block;
+    margin:12px auto;
+    background:#ffb3c6;
+    color:black;
+}
+
+/* FIREWORKS */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+
+/* PANDAS */
+.panda{
+    position:fixed;
+    font-size:40px;
+    animation:float 6s linear infinite;
+}
+@keyframes float{
+    0%{transform:translateY(100vh);opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-100vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- START PAGE -->
+<div id="startPage">
+    <h1>💖 Meena 💖</h1>
+    <h2>Will you be my Valentine?</h2>
+
+    <div id="buttonsBox">
+        <button id="yesBtn">Yes ❤️</button>
+        <button id="noBtn">No 😜</button>
+    </div>
+
+    <div id="taunt"></div>
+</div>
+
+<!-- LOVE NOTE PAGE -->
+<div id="lovePage">
+    <canvas id="fireworks"></canvas>
+
+    <h1>🎉 Yayyyyy 🎉</h1>
+    <h2>Meena, my love of life ❤️</h2>
+
+    <div class="paper">
+        <h2>My Love Note 💌</h2>
+        <p>
+            Meena, my love of life,<br><br>
+            You are my happiness, my peace, and my forever.
+            Every day with you feels magical.
+            I promise to love you endlessly,
+            to protect your heart,
+            and to choose you every single day. ❤️
+        </p>
+    </div>
+
+    <button id="startQuestions">Start Questions 💌</button>
+</div>
+
+<!-- QUESTION PAGE -->
+<div id="questionPage">
+    <h2 id="questionText"></h2>
+    <div id="options"></div>
+</div>
+
+<script>
+/* START BUTTONS */
+const noBtn=document.getElementById("noBtn");
+const taunt=document.getElementById("taunt");
+const taunts=["Nice try 😏","No escape 😜","Still trying? 😂","Just say YES ❤️"];
+
+noBtn.onclick=()=>{
+    noBtn.style.left=Math.random()*80+"%";
+    noBtn.style.top=Math.random()*150+"px";
+    taunt.innerText=taunts[Math.floor(Math.random()*taunts.length)];
+};
+
+document.getElementById("yesBtn").onclick=()=>{
+    startPage.style.display="none";
+    lovePage.style.display="block";
+    startFireworks();
+    spawnPandas();
+};
+
+/* QUESTIONS DATA */
+const questions=[
+{
+    q:"Promise you will never leave me in this whole life? 💍",
+    options:["Promise forever ❤️","Always yours 🥰"]
+},
+{
+    q:"What gift do you want this Valentine? 🎁",
+    options:["Dinner 🍽️","Bouquet 💐","Gifts 🎁","All with you 😍"]
+},
+{
+    q:"How should we celebrate Valentine’s Day? 💑",
+    options:["Romantic Dinner 🌹","Long Drive 🚗","Home & Cuddles 🏠"]
+},
+{
+    q:"What do you love most about us? 💖",
+    options:["Our Bond 🔗","Our Love 💞","Everything 😘"]
+},
+{
+    q:"Will you be my Valentine every year? 🌹",
+    options:["Always ❤️","Forever & Beyond 💫"]
+}
+];
+
+let current=0;
+
+/* START QUESTIONS */
+startQuestions.onclick=()=>{
+    lovePage.style.display="none";
+    questionPage.style.display="block";
+    showQuestion();
+};
+
+function showQuestion(){
+    const q=questions[current];
+    questionText.innerText=q.q;
+    options.innerHTML="";
+    q.options.forEach(opt=>{
+        const btn=document.createElement("button");
+        btn.className="optionBtn";
+        btn.innerText=opt;
+        btn.onclick=nextQuestion;
+        options.appendChild(btn);
+    });
+}
+
+function nextQuestion(){
+    current++;
+    if(current<questions.length){
+        showQuestion();
+    }else{
+        questionPage.innerHTML="<h1>❤️ I Love You Meena ❤️</h1><p>Happy Valentine’s Day 💕</p>";
+    }
+}
+
+/* FIREWORKS */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let particles=[];
+
+function startFireworks(){
+    setInterval(()=>{
+        for(let i=0;i<30;i++){
+            particles.push({
+                x:Math.random()*canvas.width,
+                y:Math.random()*canvas.height/2,
+                dx:(Math.random()-.5)*4,
+                dy:(Math.random()-.5)*4,
+                life:60
+            });
+        }
+    },700);
+    requestAnimationFrame(draw);
+}
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach((p,i)=>{
+        p.x+=p.dx;
+        p.y+=p.dy;
+        p.life--;
+        ctx.fillStyle="red";
+        ctx.fillRect(p.x,p.y,4,4);
+        if(p.life<=0)particles.splice(i,1);
+    });
+    requestAnimationFrame(draw);
+}
+
+/* PANDAS */
+function spawnPandas(){
+    setInterval(()=>{
+        const p=document.createElement("div");
+        p.className="panda";
+        p.innerText="🐼";
+        p.style.left=Math.random()*100+"vw";
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),7000);
+    },600);
+}
+</script>
+
+</body>
+</html>
